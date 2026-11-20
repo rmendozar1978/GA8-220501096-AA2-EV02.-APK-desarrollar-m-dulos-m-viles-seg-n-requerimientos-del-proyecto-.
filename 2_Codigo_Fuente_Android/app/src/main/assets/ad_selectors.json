@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "containersToHide": [
+    ".ad-showing",
+    ".ad-container",
+    ".ytp-ad-module",
+    ".ytp-ad-overlay-container",
+    "ytd-ad-slot-renderer",
+    "ytm-promoted-sparkles-web-renderer",
+    "ytm-promoted-video-renderer",
+    "ytm-companion-ad-renderer",
+    ".video-ads",
+    "div#player-ads",
+    "#masthead-ad"
+  ],
+  "skipButtons": [
+    ".ytp-ad-skip-button",
+    ".ytp-ad-skip-button-modern",
+    ".ytp-skip-ad-button",
+    ".videoAdUiSkipButton",
+    "button.ytp-ad-skip-button-text"
+  ],
+  "nonSkippableAdIndicators": [
+    ".ytp-ad-preview-container",
+    ".ytp-ad-duration-remaining",
+    ".ytp-ad-text"
+  ]
+}

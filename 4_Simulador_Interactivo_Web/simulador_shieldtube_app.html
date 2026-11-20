@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShieldTube - Simulador Interactivo de la Aplicación Android (Jetpack Compose)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --red-primary: #FF0000;
+            --red-dark: #CC0000;
+            --bg-dark: #0F0F0F;
+            --surface-dark: #1E1E1E;
+            --surface-card: #272727;
+            --text-light: #F1F1F1;
+            --text-muted: #AAAAAA;
+            --green-active: #22C55E;
+            --blue-accent: #38BDF8;
+            --sena-green: #39A900;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #0B0F19;
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .workspace-wrapper {
+            display: flex;
+            gap: 40px;
+            max-width: 1250px;
+            width: 100%;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Smartphone Bezel */
+        .phone-bezel {
+            width: 380px;
+            height: 770px;
+            background: #020617;
+            border-radius: 46px;
+            padding: 14px;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 0 5px #1E293B;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 5px;
+            background: #334155;
+            border-radius: 4px;
+            z-index: 100;
+        }
+
+        .phone-camera {
+            position: absolute;
+            top: 20px;
+            left: 30%;
+            width: 10px;
+            height: 10px;
+            background: #0F172A;
+            border: 2px solid #334155;
+            border-radius: 50%;
+            z-index: 100;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            border-radius: 34px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            height: 32px;
+            background: transparent;
+            color: var(--text-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 11px;
+            font-weight: 500;
+            z-index: 10;
+        }
+
+        /* Main Content Viewport */
+        .screen-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Bottom Navigation Bar (Material 3) */
+        .bottom-nav {
+            height: 64px;
+            background: #121212;
+            border-top: 1px solid #282828;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .nav-item {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            font-size: 11px;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 16px;
+            transition: all 0.2s;
+        }
+
+        .nav-item.active {
+            color: var(--text-light);
+            background: rgba(255, 0, 0, 0.15);
+        }
+
+        .nav-item.active .material-icons {
+            color: var(--red-primary);
+        }
+
+        .nav-item .material-icons {
+            font-size: 22px;
+        }
+
+        /* UI Components de Jetpack Compose */
+        .header-title {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .shield-button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 25px 0 35px;
+        }
+
+        .shield-btn {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: #1C1917;
+            border: 4px solid #44403C;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .shield-btn.active {
+            background: #14532D;
+            border-color: var(--green-active);
+            box-shadow: 0 0 35px rgba(34, 197, 94, 0.45);
+        }
+
+        .shield-btn .material-icons {
+            font-size: 54px;
+            color: #78716C;
+            transition: color 0.3s;
+        }
+
+        .shield-btn.active .material-icons {
+            color: var(--green-active);
+        }
+
+        .shield-status-text {
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 14px;
+            color: #A8A29E;
+            letter-spacing: 0.5px;
+        }
+
+        .shield-btn.active + .shield-status-text {
+            color: var(--green-active);
+        }
+
+        /* Cards informativos */
+        .compose-card {
+            background: var(--surface-dark);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 14px;
+            border: 1px solid #2E2E2E;
+        }
+
+        .compose-card-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .stat-box {
+            background: #121212;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--blue-accent);
+        }
+
+        .stat-label {
+            font-size: 10.5px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Toast de Android */
+        .android-toast {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(38, 38, 38, 0.95);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 12px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            z-index: 1000;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        /* Panel Lateral de Especificaciones */
+        .spec-panel {
+            flex: 1;
+            min-width: 320px;
+            max-width: 650px;
+            background: #111827;
+            border: 1px solid #1F2937;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .spec-panel h2 {
+            font-size: 22px;
+            color: white;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .badge-sena {
+            background: var(--sena-green);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .tech-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 15px 0 20px;
+        }
+
+        .tech-pill {
+            background: #1E293B;
+            color: #94A3B8;
+            border: 1px solid #334155;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .code-snippet {
+            background: #020617;
+            border: 1px solid #1E293B;
+            border-radius: 8px;
+            padding: 14px;
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            color: #38BDF8;
+            margin-top: 15px;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="workspace-wrapper">
+
+    <!-- SIMULADOR TELÉFONO ANDROID -->
+    <div class="phone-bezel">
+        <div class="phone-notch"></div>
+        <div class="phone-camera"></div>
+
+        <div class="phone-screen">
+            <!-- Barra de estado Android -->
+            <div class="status-bar">
+                <span>15:30</span>
+                <span>
+                    <i class="material-icons" style="font-size: 13px; vertical-align: middle;">vpn_lock</i>
+                    <i class="material-icons" style="font-size: 13px; vertical-align: middle;">wifi</i>
+                    <i class="material-icons" style="font-size: 13px; vertical-align: middle;">battery_full</i>
+                </span>
+            </div>
+
+            <!-- CUERPO PRINCIPAL DINÁMICO -->
+            <div class="screen-body" id="screen-body">
+
+                <!-- PANTALLA 1: HOME (Por defecto) -->
+                <div id="view-home">
+                    <div class="header-title">
+                        <span style="color: var(--red-primary);">Shield</span>Tube
+                        <span style="font-size: 11px; background: #272727; padding: 2px 8px; border-radius: 10px; color: #AAA;">v1.0.0</span>
+                    </div>
+                    <div class="header-subtitle">Filtrado y Privacidad en Red Móvil</div>
+
+                    <!-- Botón Escudo VPN Principal -->
+                    <div class="shield-button-container">
+                        <div class="shield-btn" id="shield-button" onclick="toggleVpn()">
+                            <i class="material-icons" id="shield-icon">shield</i>
+                        </div>
+                        <div class="shield-status-text" id="shield-status">TÚNEL VPN DESCONECTADO</div>
+                    </div>
+
+                    <!-- Tarjeta de Métricas en Tiempo Real -->
+                    <div class="compose-card">
+                        <div class="compose-card-title">
+                            <span>Telemetría de Red</span>
+                            <span style="color: var(--green-active); font-size: 11px;">En Vivo</span>
+                        </div>
+                        <div class="stat-grid">
+                            <div class="stat-box">
+                                <div class="stat-value" id="count-blocked">0</div>
+                                <div class="stat-label">Peticiones Filtradas</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value" id="val-upstream">1.1.1.1</div>
+                                <div class="stat-label">DNS Upstream</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Acción Rápida -->
+                    <button onclick="switchScreen('youtube')" style="width: 100%; background: var(--red-primary); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <i class="material-icons">play_arrow</i> Abrir Modo YouTube Seguro
+                    </button>
+                </div>
+
+                <!-- PANTALLA 2: YOUTUBE WEBVIEW -->
+                <div id="view-youtube" style="display: none;">
+                    <div class="header-title">
+                        <i class="material-icons" style="color: var(--red-primary);">smart_display</i> Modo YouTube
+                    </div>
+                    <div class="header-subtitle">Reproducción web con bloqueo heurístico de anuncios</div>
+
+                    <div class="compose-card" style="padding: 12px; margin-bottom: 12px; background: #0A0A0A; border-color: #333;">
+                        <div style="background: #181818; border-radius: 8px; height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+                            <i class="material-icons" style="font-size: 48px; color: var(--red-primary);">play_circle_filled</i>
+                            <span style="font-size: 12px; margin-top: 8px; color: #FFF;">Reproductor de Video Limpio</span>
+                            <span style="font-size: 10px; color: var(--green-active); margin-top: 4px;">✓ Reglas de ad_selectors.json activas</span>
+                        </div>
+                    </div>
+
+                    <div class="compose-card">
+                        <div class="compose-card-title">Selectores CSS Filtrados:</div>
+                        <div style="font-size: 11px; font-family: monospace; color: #94A3B8; line-height: 1.6;">
+                            • <code>.ytp-ad-module</code> (Módulos publicitarios)<br>
+                            • <code>ytd-ad-slot-renderer</code> (Banners promocionados)<br>
+                            • <code>.video-ads</code> (Clips previos y superpuestos)<br>
+                            • <code>#masthead-ad</code> (Publicidad de cabecera)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PANTALLA 3: AJUSTES -->
+                <div id="view-settings" style="display: none;">
+                    <div class="header-title">
+                        <i class="material-icons" style="color: var(--blue-accent);">settings</i> Ajustes
+                    </div>
+                    <div class="header-subtitle">Configuración de DNS y Reglas Remotas</div>
+
+                    <div class="compose-card">
+                        <label style="font-size: 12px; color: #BBB; font-weight: bold; display: block; margin-bottom: 6px;">Servidor DNS Upstream:</label>
+                        <select id="select-dns" onchange="cambiarDns(this.value)" style="width: 100%; background: #121212; color: white; border: 1px solid #444; padding: 10px; border-radius: 8px; outline: none;">
+                            <option value="1.1.1.1">Cloudflare DNS (1.1.1.1)</option>
+                            <option value="9.9.9.9">Quad9 Security (9.9.9.9)</option>
+                            <option value="94.140.14.14">AdGuard Default (94.140.14.14)</option>
+                            <option value="8.8.8.8">Google DNS (8.8.8.8)</option>
+                        </select>
+                    </div>
+
+                    <div class="compose-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-size: 13px; font-weight: 600;">Actualización Automática</div>
+                                <div style="font-size: 11px; color: #888;">Descargar firmas en segundo plano</div>
+                            </div>
+                            <input type="checkbox" checked onchange="mostrarToast('Auto-update: ' + this.checked)" style="width: 18px; height: 18px;">
+                        </div>
+                    </div>
+
+                    <div class="compose-card">
+                        <div style="font-size: 12px; color: #888;">Última actualización de reglas:</div>
+                        <div style="font-size: 13px; font-weight: bold; color: var(--green-active); margin: 4px 0 12px;" id="last-update">Hoy, 15:30</div>
+                        <button onclick="actualizarReglas()" style="width: 100%; background: #2A2A2A; color: white; border: 1px solid #444; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600;">
+                            Sincronizar Firmas Ahora
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PANTALLA 4: GUÍA -->
+                <div id="view-guide" style="display: none;">
+                    <div class="header-title">
+                        <i class="material-icons" style="color: #F59E0B;">help_outline</i> Guía de Uso
+                    </div>
+                    <div class="header-subtitle">Expectativas honestas y arquitectura de red</div>
+
+                    <div class="compose-card">
+                        <div class="compose-card-title" style="color: #F59E0B;">¿Cómo funciona el túnel?</div>
+                        <p style="font-size: 12px; color: #CCC; line-height: 1.5;">
+                            ShieldTube crea una interfaz VPN local en el dispositivo (Loopback). No redirige tu tráfico a servidores externos de pago, sino que inspecciona las consultas DNS localmente en el teléfono.
+                        </p>
+                    </div>
+
+                    <div class="compose-card">
+                        <div class="compose-card-title">Permisos Android 14+</div>
+                        <p style="font-size: 12px; color: #CCC; line-height: 1.5;">
+                            Configurado con <code>foregroundServiceType="systemExempted"</code> para garantizar que el sistema operativo no cierre el filtrado en segundo plano.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- NAVEGACIÓN INFERIOR (BOTTOM NAVIGATION BAR) -->
+            <div class="bottom-nav">
+                <button class="nav-item active" id="tab-home" onclick="switchScreen('home')">
+                    <i class="material-icons">home</i>
+                    <span>Inicio</span>
+                </button>
+                <button class="nav-item" id="tab-youtube" onclick="switchScreen('youtube')">
+                    <i class="material-icons">play_circle</i>
+                    <span>YouTube</span>
+                </button>
+                <button class="nav-item" id="tab-settings" onclick="switchScreen('settings')">
+                    <i class="material-icons">settings</i>
+                    <span>Ajustes</span>
+                </button>
+                <button class="nav-item" id="tab-guide" onclick="switchScreen('guide')">
+                    <i class="material-icons">help_outline</i>
+                    <span>Guía</span>
+                </button>
+            </div>
+
+            <!-- Toast Flotante -->
+            <div class="android-toast" id="android-toast">Notificación</div>
+        </div>
+    </div>
+
+    <!-- PANEL LATERAL DE INGENIERÍA Y CHEQUEO -->
+    <div class="spec-panel">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span class="badge-sena">EVIDENCIA GA8-220501096-AA2-EV02</span>
+            <span style="font-size: 12px; color: #38BDF8; font-family: monospace;">com.shieldtube.app</span>
+        </div>
+
+        <h2>Módulo Móvil Nativo Android (APK)</h2>
+        <p style="font-size: 14px; color: #94A3B8; line-height: 1.6;">
+            Esta aplicación representa la culminación técnica de la actividad formativa AA2, integrando las tecnologías emergentes (Edge AI / Heurística y Cloud) con la arquitectura nativa moderna de Android en <strong>Kotlin</strong> y <strong>Jetpack Compose</strong>.
+        </p>
+
+        <div class="tech-tags">
+            <span class="tech-pill">Kotlin 1.9</span>
+            <span class="tech-pill">Jetpack Compose M3</span>
+            <span class="tech-pill">Dagger Hilt (KSP)</span>
+            <span class="tech-pill">DataStore Preferences</span>
+            <span class="tech-pill">VpnService (API 35)</span>
+            <span class="tech-pill">Coroutines Flow</span>
+        </div>
+
+        <h3 style="font-size: 15px; color: #F1F5F9; margin-top: 20px; margin-bottom: 8px;">Cumplimiento de Lista de Chequeo SENA:</h3>
+        <ul style="font-size: 13.5px; color: #CBD5E1; margin-left: 20px; line-height: 1.8;">
+            <li>✓ <strong>Codificación según requerimientos:</strong> Pantallas de navegación, servicio VPN y DataStore implementados.</li>
+            <li>✓ <strong>Buenas prácticas:</strong> Clean Architecture (Core/Feature), MVVM con StateFlow reactivo.</li>
+            <li>✓ <strong>Manejo del IDE Android Studio:</strong> Gradle Kotlin DSL, Version Catalogs (<code>libs.versions.toml</code>), targetSdk 35.</li>
+            <li>✓ <strong>Control de versiones:</strong> Estructura modular preparada para control en repositorio Git / GitHub.</li>
+            <li>✓ <strong>Pruebas unitarias:</strong> Cobertura de pruebas en <code>HomeViewModelTest</code> y <code>AppPreferencesRepositoryTest</code> con MockK y Turbine.</li>
+        </ul>
+
+        <div class="code-snippet">
+// Flujo Reactivo de Estado (HomeViewModel.kt)
+val uiState: StateFlow&lt;HomeUiState&gt; = preferencesRepository.preferencesFlow
+    .map { prefs -&gt;
+        HomeUiState(
+            isVpnActive = prefs.isVpnEnabled,
+            blockedQueriesCount = prefs.totalBlockedQueries,
+            upstreamDns = prefs.upstreamDns
+        )
+    }
+    .stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(5000), initialValue = HomeUiState())
+        </div>
+    </div>
+
+</div>
+
+<script>
+    let isVpnOn = false;
+    let blockedCount = 0;
+    let intervalTimer = null;
+
+    function mostrarToast(msg) {
+        const toast = document.getElementById('android-toast');
+        toast.textContent = msg;
+        toast.style.opacity = '1';
+        setTimeout(() => {
+            toast.style.opacity = '0';
+        }, 2200);
+    }
+
+    function toggleVpn() {
+        isVpnOn = !isVpnOn;
+        const btn = document.getElementById('shield-button');
+        const status = document.getElementById('shield-status');
+
+        if (isVpnOn) {
+            btn.classList.add('active');
+            status.textContent = 'TÚNEL VPN ACTIVO (PROTEGIDO)';
+            mostrarToast('Servicio ShieldTubeVpnService iniciado');
+            
+            // Simular incremento de telemetría bloqueada
+            intervalTimer = setInterval(() => {
+                blockedCount += Math.floor(Math.random() * 3) + 1;
+                document.getElementById('count-blocked').textContent = blockedCount;
+            }, 3000);
+        } else {
+            btn.classList.remove('active');
+            status.textContent = 'TÚNEL VPN DESCONECTADO';
+            mostrarToast('Servicio VPN detenido');
+            if (intervalTimer) clearInterval(intervalTimer);
+        }
+    }
+
+    function switchScreen(screenId) {
+        ['home', 'youtube', 'settings', 'guide'].forEach(id => {
+            document.getElementById('view-' + id).style.display = (id === screenId) ? 'block' : 'none';
+            document.getElementById('tab-' + id).classList.toggle('active', id === screenId);
+        });
+    }
+
+    function cambiarDns(dns) {
+        document.getElementById('val-upstream').textContent = dns;
+        mostrarToast('DNS Upstream actualizado a: ' + dns);
+    }
+
+    function actualizarReglas() {
+        mostrarToast('Descargando selectores actualizados de GitHub...');
+        setTimeout(() => {
+            document.getElementById('last-update').textContent = 'Justo ahora';
+            mostrarToast('Firmas de ad_selectors.json actualizadas exitosamente');
+        }, 1200);
+    }
+</script>
+
+</body>
+</html>

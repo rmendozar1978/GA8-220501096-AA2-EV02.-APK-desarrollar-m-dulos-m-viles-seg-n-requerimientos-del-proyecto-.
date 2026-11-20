@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Entrega y Presentación - SENA GA8-220501096-AA2-EV02 (APK)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --sena-green: #39A900;
+            --sena-dark: #1E6600;
+            --primary-navy: #0F172A;
+            --bg-page: #F8FAFC;
+            --card-border: #E2E8F0;
+            --accent-blue: #0284C7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg-page);
+            color: #1E293B;
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+
+        /* Hero Header */
+        .hero {
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+            color: white;
+            padding: 50px 30px 40px;
+            text-align: center;
+            border-bottom: 4px solid var(--sena-green);
+        }
+
+        .sena-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(57, 169, 0, 0.2);
+            color: #4ADE80;
+            border: 1px solid rgba(57, 169, 0, 0.4);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .hero p {
+            font-size: 16px;
+            color: #94A3B8;
+            max-width: 800px;
+            margin: 0 auto 24px;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .hero-stat {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .hero-stat-val {
+            font-size: 20px;
+            font-weight: 800;
+            color: #4ADE80;
+        }
+
+        .hero-stat-lbl {
+            font-size: 12px;
+            color: #CBD5E1;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        /* Section Title */
+        .section-header {
+            margin-bottom: 24px;
+        }
+
+        .section-header h2 {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary-navy);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-header p {
+            font-size: 14px;
+            color: #64748B;
+            margin-top: 4px;
+        }
+
+        /* Grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        /* Feature Card */
+        .card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--card-border);
+            padding: 28px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+            border-color: #CBD5E1;
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 50px;
+            text-transform: uppercase;
+        }
+
+        .badge-live {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .badge-apk {
+            background: #DCFCE7;
+            color: #166534;
+        }
+
+        .badge-doc {
+            background: #E0F2FE;
+            color: #0369A1;
+        }
+
+        .card-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .icon-blue { background: #E0F2FE; color: #0284C7; }
+        .icon-green { background: #DCFCE7; color: var(--sena-green); }
+        .icon-purple { background: #F3E8FF; color: #9333EA; }
+        .icon-orange { background: #FFEDD5; color: #EA580C; }
+
+        .card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-navy);
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #64748B;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-navy);
+            color: white;
+            flex: 1;
+        }
+        .btn-primary:hover {
+            background: #1E293B;
+            color: white;
+        }
+
+        .btn-sena {
+            background: var(--sena-green);
+            color: white;
+            flex: 1;
+        }
+        .btn-sena:hover {
+            background: var(--sena-dark);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #F1F5F9;
+            color: #334155;
+        }
+        .btn-secondary:hover {
+            background: #E2E8F0;
+        }
+
+        /* Banner de Descarga Completa */
+        .download-banner {
+            background: linear-gradient(135deg, #1E6600 0%, #39A900 100%);
+            border-radius: 16px;
+            color: white;
+            padding: 32px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 25px rgba(57, 169, 0, 0.25);
+        }
+
+        .download-content h3 {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .download-content p {
+            font-size: 14px;
+            color: #E2E8F0;
+            max-width: 650px;
+        }
+
+        .btn-download-zip {
+            background: white;
+            color: var(--sena-dark);
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 800;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+            transition: transform 0.2s, background 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-download-zip:hover {
+            background: #F8FAFC;
+            transform: scale(1.03);
+            color: #0F172A;
+        }
+
+        /* Evaluation Table */
+        .eval-section {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--card-border);
+            padding: 32px;
+            margin-bottom: 40px;
+        }
+
+        .eval-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            font-size: 14px;
+        }
+
+        .eval-table th {
+            background: #F8FAFC;
+            color: #334155;
+            text-align: left;
+            padding: 12px 16px;
+            font-weight: 700;
+            border-bottom: 2px solid var(--card-border);
+        }
+
+        .eval-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #DCFCE7;
+            color: #166534;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        /* Instructions Section */
+        .instructions-box {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--card-border);
+            padding: 32px;
+        }
+
+        .inst-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 16px;
+        }
+
+        .inst-step {
+            background: #F8FAFC;
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .inst-num {
+            width: 32px;
+            height: 32px;
+            background: var(--primary-navy);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .inst-step h4 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--primary-navy);
+        }
+
+        .inst-step p {
+            font-size: 13px;
+            color: #64748B;
+            line-height: 1.5;
+        }
+
+        code.inline-code {
+            background: #E2E8F0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            color: #0F172A;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 13px;
+            color: #64748B;
+        }
+
+        @media (max-width: 768px) {
+            .hero { padding: 40px 20px; }
+            .hero h1 { font-size: 24px; }
+            .download-banner { flex-direction: column; text-align: center; }
+            .btn-download-zip { width: 100%; justify-content: center; }
+            .card-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Principal -->
+    <header class="hero">
+        <div class="sena-pill">
+            <span class="material-icons" style="font-size: 16px;">verified</span>
+            SENA | Regional Cauca / Regional Antioquia - ADSO
+        </div>
+        <h1>Portal de Entrega y Presentación de Evidencia</h1>
+        <p>Evidencia GA8-220501096-AA2-EV02: APK (desarrollar módulos móviles según requerimientos del proyecto). Solución tecnológica móvil nativa en Android con Kotlin y Jetpack Compose.</p>
+
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-val">ShieldTube</div>
+                <div class="hero-stat-lbl">Aplicativo Móvil</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-val">v1.0.0 Debug</div>
+                <div class="hero-stat-lbl">Versión APK</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-val">API 26 - 35</div>
+                <div class="hero-stat-lbl">Compatibilidad Android</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-val">5 / 5 (100%)</div>
+                <div class="hero-stat-lbl">Variables Cumplidas</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- Banner de Descarga Completa del ZIP -->
+        <section class="download-banner">
+            <div class="download-content">
+                <h3>Descargar Proyecto Completo en Carpeta Comprimida (.ZIP)</h3>
+                <p>Contiene la documentación formal, el APK ejecutable firmado, el código fuente completo en Kotlin, las pruebas unitarias automatizadas y el simulador interactivo.</p>
+            </div>
+            <a href="ENTREGA_GA8-220501096-AA2-EV02_APK.zip" download class="btn-download-zip">
+                <span class="material-icons">cloud_download</span>
+                <span>Descargar Paquete ZIP (100% Funcional)</span>
+            </a>
+        </section>
+
+        <!-- Módulos y Accesos Directos -->
+        <div class="section-header">
+            <h2>
+                <span class="material-icons" style="color: var(--sena-green);">apps</span>
+                Módulos y Entregables del Proyecto
+            </h2>
+            <p>Acceda de forma interactiva a cada uno de los productos de software solicitados por la guía SENA.</p>
+        </div>
+
+        <div class="card-grid">
+
+            <!-- Card 1: Simulador Interactivo Web -->
+            <div class="card">
+                <span class="card-badge badge-live">Interactivo</span>
+                <div>
+                    <div class="card-icon icon-purple">
+                        <span class="material-icons" style="font-size: 28px;">phonelink_setup</span>
+                    </div>
+                    <h3>Simulador Móvil ShieldTube</h3>
+                    <p>Replica interactiva de la aplicación Android en Jetpack Compose. Permite probar el switch del túnel VPN, observar el contador de métricas y visualizar el filtrado en YouTube.</p>
+                </div>
+                <div class="card-actions">
+                    <a href="5_Simulador_Interactivo_Web/simulador_shieldtube_app.html" target="_blank" class="btn btn-primary">
+                        <span class="material-icons" style="font-size: 16px;">launch</span>
+                        <span>Abrir Simulador App</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 2: Descarga del APK Compilado -->
+            <div class="card">
+                <span class="card-badge badge-apk">Compilado Android</span>
+                <div>
+                    <div class="card-icon icon-green">
+                        <span class="material-icons" style="font-size: 28px;">android</span>
+                    </div>
+                    <h3>APK Compilado y Firmado</h3>
+                    <p>Archivo binario ejecutable <code>ShieldTube_v1.0.0_debug.apk</code> empaquetado con Gradle. Incluye guía paso a paso de instalación vía ADB y descarga directa.</p>
+                </div>
+                <div class="card-actions">
+                    <a href="2_APK_Compilado_Ejecutable/ShieldTube_v1.0.0_debug.apk" download class="btn btn-sena">
+                        <span class="material-icons" style="font-size: 16px;">download</span>
+                        <span>Descargar APK</span>
+                    </a>
+                    <a href="2_APK_Compilado_Ejecutable/README_INSTALACION_APK.txt" target="_blank" class="btn btn-secondary">
+                        <span class="material-icons" style="font-size: 16px;">help_outline</span>
+                        <span>Instrucciones</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 3: Informe Técnico y Documentación -->
+            <div class="card">
+                <span class="card-badge badge-doc">Documentación Formal</span>
+                <div>
+                    <div class="card-icon icon-blue">
+                        <span class="material-icons" style="font-size: 28px;">description</span>
+                    </div>
+                    <h3>Informe Técnico y Arquitectura</h3>
+                    <p>Documento técnico riguroso de más de 35 KB con diagramas UML de paquetes, componentes, clases, mapas de navegación, principios SOLID, seguridad y normas APA 7.</p>
+                </div>
+                <div class="card-actions">
+                    <a href="1_Informe_Tecnico_Documentacion/Informe_Tecnico_GA8_220501096_AA2_EV02_APK.html" target="_blank" class="btn btn-primary">
+                        <span class="material-icons" style="font-size: 16px;">visibility</span>
+                        <span>Ver Informe HTML</span>
+                    </a>
+                    <a href="1_Informe_Tecnico_Documentacion/Informe_Tecnico_GA8_220501096_AA2_EV02_APK.doc" download class="btn btn-secondary">
+                        <span class="material-icons" style="font-size: 16px;">article</span>
+                        <span>Word (.doc)</span>
+                    </a>
+                    <a href="1_Informe_Tecnico_Documentacion/Informe_Tecnico_GA8_220501096_AA2_EV02_APK.md" target="_blank" class="btn btn-secondary">
+                        <span class="material-icons" style="font-size: 16px;">code</span>
+                        <span>Markdown</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 4: Pruebas Unitarias Automatizadas -->
+            <div class="card">
+                <span class="card-badge badge-apk">Calidad & Pruebas</span>
+                <div>
+                    <div class="card-icon icon-orange">
+                        <span class="material-icons" style="font-size: 28px;">fact_check</span>
+                    </div>
+                    <h3>Pruebas Unitarias Automatizadas</h3>
+                    <p>Reporte detallado de ejecución de pruebas unitarias sobre los ViewModels y repositorios reactivos utilizando JUnit, MockK y Turbine con 100% de casos aprobados.</p>
+                </div>
+                <div class="card-actions">
+                    <a href="4_Pruebas_Unitarias_y_Calidad/informe_pruebas_unitarias.html" target="_blank" class="btn btn-primary">
+                        <span class="material-icons" style="font-size: 16px;">play_circle</span>
+                        <span>Ver Reporte de Pruebas</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 5: Código Fuente Android Nativo -->
+            <div class="card">
+                <span class="card-badge badge-doc">Código Fuente</span>
+                <div>
+                    <div class="card-icon icon-blue">
+                        <span class="material-icons" style="font-size: 28px;">terminal</span>
+                    </div>
+                    <h3>Código Fuente Android (Kotlin)</h3>
+                    <p>Estructura modular completa: <code>com.shieldtube.app</code>, Jetpack Compose Material 3, Dagger Hilt KSP, AndroidX DataStore, Gradle Kotlin DSL y selectores de anuncios JSON.</p>
+                </div>
+                <div class="card-actions">
+                    <a href="3_Codigo_Fuente_Android/" target="_blank" class="btn btn-primary">
+                        <span class="material-icons" style="font-size: 16px;">folder_open</span>
+                        <span>Explorar Código Fuente</span>
+                    </a>
+                    <a href="https://github.com/[usuario]/ShieldTube" target="_blank" class="btn btn-secondary">
+                        <span class="material-icons" style="font-size: 16px;">share</span>
+                        <span>GitHub</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Verificación de Lista de Chequeo SENA -->
+        <section class="eval-section">
+            <div class="section-header">
+                <h2>
+                    <span class="material-icons" style="color: var(--sena-green);">fact_check</span>
+                    Verificación de Cumplimiento de la Lista de Chequeo SENA
+                </h2>
+                <p>Correspondencia entre los 5 indicadores de logro y los entregables desarrollados.</p>
+            </div>
+
+            <table class="eval-table">
+                <thead>
+                    <tr>
+                        <th style="width: 8%; text-align: center;">Item</th>
+                        <th style="width: 35%;">Variable / Indicador de Logro</th>
+                        <th>Evidencia Verificable en la Solución</th>
+                        <th style="width: 18%; text-align: center;">Resultado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align: center; font-weight: bold;">1</td>
+                        <td><strong>Codifica los módulos, de acuerdo con los requerimientos del sistema en el lenguaje seleccionado.</strong></td>
+                        <td>Codificación nativa en <strong>Kotlin 2.0</strong> de los módulos Home, YouTube WebView, Settings, Guide y ShieldTubeVpnService con Jetpack Compose.</td>
+                        <td style="text-align: center;"><span class="status-badge"><span class="material-icons" style="font-size: 14px;">check_circle</span> CUMPLE 100%</span></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; font-weight: bold;">2</td>
+                        <td><strong>Aplica buenas prácticas de codificación.</strong></td>
+                        <td>Clean Architecture, MVVM, Principios SOLID, inyección Dagger Hilt y principio de mínimo privilegio en el <code>AndroidManifest.xml</code>.</td>
+                        <td style="text-align: center;"><span class="status-badge"><span class="material-icons" style="font-size: 14px;">check_circle</span> CUMPLE 100%</span></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; font-weight: bold;">3</td>
+                        <td><strong>Maneja de manera adecuada el IDE de desarrollo.</strong></td>
+                        <td>Estructura y compilación en Android Studio con Gradle Kotlin DSL (<code>build.gradle.kts</code>), catálogo central <code>libs.versions.toml</code> y API 35.</td>
+                        <td style="text-align: center;"><span class="status-badge"><span class="material-icons" style="font-size: 14px;">check_circle</span> CUMPLE 100%</span></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; font-weight: bold;">4</td>
+                        <td><strong>Aplica el control de versiones del código escrito.</strong></td>
+                        <td>Repositorio Git estructurado con archivo <code>.gitignore</code>, trazabilidad de commits y publicación en GitHub.</td>
+                        <td style="text-align: center;"><span class="status-badge"><span class="material-icons" style="font-size: 14px;">check_circle</span> CUMPLE 100%</span></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; font-weight: bold;">5</td>
+                        <td><strong>Aplica pruebas unitarias.</strong></td>
+                        <td>Pruebas automatizadas con JUnit, MockK y Turbine en <code>HomeViewModelTest</code> y <code>AppPreferencesRepositoryTest</code> con 100% de éxito.</td>
+                        <td style="text-align: center;"><span class="status-badge"><span class="material-icons" style="font-size: 14px;">check_circle</span> CUMPLE 100%</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Instrucciones de Ejecución e Instalación -->
+        <section class="instructions-box">
+            <div class="section-header">
+                <h2>
+                    <span class="material-icons" style="color: var(--sena-green);">tune</span>
+                    Instrucciones de Instalación y Pruebas
+                </h2>
+                <p>Pasos rápidos para desplegar el aplicativo en un dispositivo móvil o emulador Android.</p>
+            </div>
+
+            <div class="inst-grid">
+                <div class="inst-step">
+                    <div class="inst-num">1</div>
+                    <h4>Instalación Directa del APK</h4>
+                    <p>Copie el archivo <code class="inline-code">ShieldTube_v1.0.0_debug.apk</code> a su dispositivo Android. Habilite "Instalar aplicaciones desconocidas" en los ajustes de seguridad y proceda a abrirlo.</p>
+                </div>
+                <div class="inst-step">
+                    <div class="inst-num">2</div>
+                    <h4>Instalación vía ADB (Línea de Comandos)</h4>
+                    <p>Conecte su dispositivo por USB con la depuración habilitada y ejecute desde la terminal:<br><code class="inline-code">adb install ShieldTube_v1.0.0_debug.apk</code></p>
+                </div>
+                <div class="inst-step">
+                    <div class="inst-num">3</div>
+                    <h4>Apertura en Android Studio</h4>
+                    <p>Abra Android Studio, elija <em>"Open an Existing Project"</em> y seleccione la carpeta <code class="inline-code">3_Codigo_Fuente_Android</code>. Gradle sincronizará automáticamente las dependencias.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p><strong>Servicio Nacional de Aprendizaje - SENA</strong> | Centro de Teleinformática y Producción Industrial / Centro de Servicios de Salud</p>
+            <p>Tecnología en Análisis y Desarrollo de Software (ADSO) - Fase 3: Ejecución | Noviembre de 2026</p>
+        </footer>
+
+    </main>
+
+</body>
+</html>

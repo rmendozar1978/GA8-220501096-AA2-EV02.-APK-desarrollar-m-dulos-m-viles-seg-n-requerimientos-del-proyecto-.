@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ShieldTube</string>
+    <string name="nav_home">Inicio</string>
+    <string name="nav_youtube">YouTube</string>
+    <string name="nav_settings">Ajustes</string>
+    <string name="nav_guide">Guía</string>
+    <string name="vpn_service_notification_title">ShieldTube DNS Activo</string>
+    <string name="vpn_service_notification_desc">Filtrando consultas DNS locales y reduciendo rastreadores.</string>
+</resources>

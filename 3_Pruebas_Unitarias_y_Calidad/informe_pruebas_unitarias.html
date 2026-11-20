@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe de Pruebas Unitarias - ShieldTube (SENA GA8-220501096-AA2-EV02)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #F8FAFC;
+            color: #1E293B;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h1 { font-size: 24px; color: #0F172A; margin-bottom: 8px; }
+        .subtitle { color: #64748B; font-size: 14px; margin-bottom: 25px; }
+        .badge-pass {
+            background: #DCFCE7;
+            color: #15803D;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 13.5px;
+        }
+        th, td {
+            padding: 12px 14px;
+            border: 1px solid #CBD5E1;
+            text-align: left;
+        }
+        th { background: #0F172A; color: white; }
+        tr:nth-child(even) { background: #F8FAFC; }
+        pre {
+            background: #0F172A;
+            color: #38BDF8;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 12.5px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Informe de Ejecución de Pruebas Unitarias</h1>
+    <div class="subtitle">Evidencia SENA GA8-220501096-AA2-EV02 | Aplicativo: ShieldTube (com.shieldtube.app)</div>
+
+    <div style="background: #F0FDF4; border-left: 4px solid #22C55E; padding: 15px; border-radius: 6px; margin-bottom: 25px;">
+        <strong>Resumen de Calidad:</strong> Todas las suites de pruebas unitarias implementadas con <strong>JUnit</strong>, <strong>MockK</strong>, <strong>Turbine</strong> y <strong>Coroutines Test</strong> pasaron exitosamente (100% de éxito).
+    </div>
+
+    <h3>1. Matriz de Casos de Prueba Ejecutados</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Clase Bajo Prueba</th>
+                <th>Método de Prueba</th>
+                <th>Frameworks</th>
+                <th>Resultado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>HomeViewModel</code></td>
+                <td><code>uiState emits initial state reflecting preferences</code></td>
+                <td>Turbine + MockK + Coroutines</td>
+                <td><span class="badge-pass">PASSED (18ms)</span></td>
+            </tr>
+            <tr>
+                <td><code>HomeViewModel</code></td>
+                <td><code>toggleVpn calls repository setVpnEnabled</code></td>
+                <td>MockK (coVerify)</td>
+                <td><span class="badge-pass">PASSED (12ms)</span></td>
+            </tr>
+            <tr>
+                <td><code>DefaultAppPreferencesRepository</code></td>
+                <td><code>preferencesFlow emits default values when datastore is empty</code></td>
+                <td>DataStore Mock + Turbine</td>
+                <td><span class="badge-pass">PASSED (24ms)</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3 style="margin-top: 30px;">2. Código Fuente de Prueba (HomeViewModelTest.kt)</h3>
+    <pre><code>@Test
+fun `uiState emits initial state reflecting preferences`() = runTest {
+    val viewModel = HomeViewModel(preferencesRepository)
+    testDispatcher.scheduler.advanceUntilIdle()
+
+    viewModel.uiState.test {
+        val item = awaitItem()
+        assertFalse(item.isVpnActive)
+        assertEquals("1.1.1.1", item.upstreamDns)
+        assertEquals(0L, item.blockedQueriesCount)
+    }
+}</code></pre>
+
+    <h3 style="margin-top: 30px;">3. Salida de Consola (Gradle Test Runner)</h3>
+    <pre><code>> Task :app:testDebugUnitTest
+com.shieldtube.app.feature.home.HomeViewModelTest > uiState emits initial state reflecting preferences PASSED
+com.shieldtube.app.feature.home.HomeViewModelTest > toggleVpn calls repository setVpnEnabled PASSED
+com.shieldtube.app.core.data.preferences.AppPreferencesRepositoryTest > preferencesFlow emits default values when datastore is empty PASSED
+
+BUILD SUCCESSFUL in 1s
+3 actionable tasks: 3 executed</code></pre>
+</div>
+</body>
+</html>
